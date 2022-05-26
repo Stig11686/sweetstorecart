@@ -65,13 +65,19 @@ function removeWeightFromProduct(event){
     event.preventDefault();
     const targetId = event.target.closest('[data-id]').dataset.id;
 
-
     for (let i = 0; i < window.cart.length; i++) {
-        if (window.cart[i].id == targetId && window.cart[i].weight > 0) {
-            window.cart[i].weight -= window.cart[i].weightInGrams
-            window.cart = window.cart.filter(item => item.weight > 0);
-            console.log(window.cart);
-            saveCart();
+        if (window.cart[i].id == targetId) {
+            //remove product from cart if the next click will take the weight down to zero
+            if(window.cart[i].weight - window.cart[i].weightInGrams <= 0){
+                window.cart[i].weight -= window.cart[i].weightInGrams
+                window.cart = window.cart.filter(item => item.weight > 0);
+                saveCart();
+                window.location.reload();
+                saveCart();
+            } else {
+                window.cart[i].weight -= window.cart[i].weightInGrams
+                saveCart();
+            }
         }
     }
 
