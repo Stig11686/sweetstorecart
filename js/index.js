@@ -43,11 +43,11 @@ function addProductToCart(event) {
     const productTitles =
     Array.from(document.querySelectorAll('.product-title-link'));
 
-    // productTitles.forEach(title => {
-    //     if(event.target !== title){
-    //         event.preventDefault();
-    //     }
-    // })
+    productTitles.forEach(title => {
+        if(event.target !== title){
+            event.preventDefault();
+        }
+    })
 
 
     const targetId = event.target.closest('[data-id]').dataset.id;
