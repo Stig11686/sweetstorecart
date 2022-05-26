@@ -40,15 +40,9 @@ productCards.forEach(product => {
 
 function addProductToCart(event) {
     // don't follow the link href
-    const productTitles =
-    Array.from(document.querySelectorAll('.product-title-link'));
+    const productTitle = event.target.closest('.product-title-link');
 
-    productTitles.forEach(title => {
-        if(event.target !== title){
-            event.preventDefault();
-        }
-    })
-
+    if(!productTitle) { event.preventDefault(); }
 
     const targetId = event.target.closest('[data-id]').dataset.id;
 
