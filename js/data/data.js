@@ -67,7 +67,7 @@ window.products = [
     }
 ];
 
-// I'm going to inject 3 products into the featured products area.
+// INJECT PRODUCTS INTO FEATURED AREA ON HOMEPAGE
 
 function renderFeaturedProducts(data){
     const featured = document.querySelector('.featured');
@@ -99,7 +99,7 @@ function renderProducts(location, products){
         <div class="product-card-img mb-4 rounded" style="background-image: url(${product.imagePath});">
         </div>
         <div class="product-card-details flex flex-col justify-between">
-            <p class="product-title text-lg font-bold"><a href="./product.html?id=${product.id}">${product.name}</a></p>
+            <p class="product-title text-lg font-bold"><a class="product-title-link" href="product.html?id=${product.id}">${product.name}</a></p>
             <p class="product-price mb-4">${product.price} per ${product.weightInGrams}</p>
             <p class="product-description">${product.description}</p>
             <button class="add-to-cart mt-6 bg-cta text-white px-4 py-2 rounded w-6/12 mx-auto">Add to Cart</button>

@@ -18,15 +18,22 @@
                 clifford: '#da373d',
                 cta: '#E70040',
                 dark: '#333',
-
+                lightgrey: '#999',
+                red: '#FF0000',
+              },
+              spacing: {
+                  '-100': '-100%',
+                  '50': '50%',
+                  '10pc': '10%',
               },
               fontSize: {
-                  xxl: '4rem',
+                  xxl: '2.5rem',
+                  xxxl: '4rem',
               },
             }
           }
         }
-      </script>
+    </script>
 </head>
 <body id="product-page">
     <!--
@@ -51,29 +58,36 @@
             </nav>
         </header>
         <main class="flex flex-col align-center justify-center">
-            <h1 class="text-xxl font-bold mb-8 product-title"></h1>
-            <a href="./products.html" class="w-6/12 mx-auto text-black font-bold p-3 text-center rounded bg-cta text-white">SEE OUR FULL COLLECTION</a>
+            <h1 class="text-xxxl font-bold mb-8 product-title"></h1>
+            <a href="./products.html" class="mx-auto text-black font-bold p-3 text-center rounded bg-cta text-white">SEE OUR FULL COLLECTION</a>
         </main>
     </section>
 
     <section id="product" class="w-9/12 mx-auto py-24">
         <h2 class="text-xxl text-center single-product-title"></h2>
-        <div class="single-product-display flex py-24">
-            <div class="w-6/12 px-8">
-                <img src="" alt="" />
+        <div class="single-product-display flex flex-wrap py-24">
+            <div class="w-full lg:w-6/12 px-8">
+                <img id="product-image" src="" alt="" />
             </div>
-            <div class="w-6/12 px-12">
-                <h2 class="product-title"></h2>
-                <p class="product-description"></p>
-                <p class="product-price"></p>
+            <div class="w-full lg:w-6/12 px-12 product-card" data-id="">
+                <h2 class="product-title text-bold text-xxl mb-12"></h2>
+                <p class="product-description mb-12"></p>
+                <p class="product-price font-bold text-xl mb-12"></p>
                 <button class="add-cart px-4 py-2 bg-cta text-white">Add to Cart</button>
             </div>
         </div>
     </section>
-
+    <div id="cart-widget" class="w-20 h-20 fixed right-0 top-50 rounded">
+        <div class="bg-cta rounded relative">
+            <a href="cart.html">
+                <img src="assets/icon-cart.svg" class="w-full" alt="cart icon">
+                <div class="h-6 w-6 bg-white text-dark flex items-center cart-items-number absolute bottom-0 right-10pc rounded-full text-white p-2 hidden"></div>
+            </a>
+        </div>
+    </div>
     <script src="js/data/data.js" type="text/javascript"></script>
     <script src="js/index.js" type="text/javascript"></script>
-    <script src="js/data/cart.js" type="text/javascript"></script>
+    <script src="js/cart.js" type="text/javascript"></script>
 
     </body>
 </html>
