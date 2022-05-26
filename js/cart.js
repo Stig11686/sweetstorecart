@@ -147,7 +147,6 @@ if(cartPage){
 
             let subtotal = prices.reduce((a, b) => a + b);
             subtotal = subtotal.toFixed(2);
-            console.log(subtotal);
             subtotalElement.innerText = `£${subtotal}`
 
             if(typeof postalTotal === 'number'){
@@ -163,9 +162,9 @@ if(cartPage){
         let cartWeight;
 
         if(window.cart.length){
-            cartWeight = window.cart.map(item => item.weight).reduce((a,b) => a + b)
+            cartWeight = window.cart.map(item => item.weight).reduce((a,b) => a + b).toFixed(0);
         } else {
-            cartWeight = 0
+            cartWeight = 0;
         }
         return cartWeight;
     }
@@ -180,7 +179,7 @@ if(cartPage){
 
             switch (true) {
                 case cartWeight < 40:
-                    postageMessage.innerText = 'You need at least 40grams of sweets in your cart to order'
+                    postageMessage.innerText = `You need at least 40 grams of sweets in your cart to order. You currently have ${handleCartWeight()} grams`
                     break;
                 case (cartWeight > 40 && cartWeight <= 250):
                     postageMessage.innerHTML = ''
