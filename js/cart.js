@@ -18,11 +18,11 @@ if(!window.cart.length){
     window.cart.forEach(element => {
         markup = `
         <tr class="w-full my-4 rounded cart-item text-center" data-id="${element.id}">
-            <td class="h-full"><p class="block w-6 h-6 flex items-center justify-center text-lightgrey font-bold text-center p-2 rounded-full border border-1 border-lightgrey">X</p></td>
+            <td class="h-full"><p class="remove-item block w-6 h-6 flex items-center justify-center text-lightgrey font-bold text-center p-2 rounded-full border border-1 border-lightgrey" onclick="removeItemFromCart()">X</p></td>
             <td><img class="h-28 w-28" src="${element.imagePath}" alt="${element.name}" /></td>
             <td><p>${element.name}</p></td>
             <td><p class="price">£${element.price}</p></td>
-            <td class=""><input class="rounded text-white bg-cta py-2 px-4 minusBtn" type="button" value="-"><label class="sr-only">${element.name} quantity</label><input class="text-center itemQuantity" type="number" step="${element.weightInGrams}" size="4" value="${element.weight}" inputmode="numeric" /><input type="button" class="bg-cta px-4 py-2 rounded plusBtn" value="+" /></td>
+            <td class=""><input class="rounded text-white bg-cta py-2 px-4 minusBtn" type="button" value="-"><label class="sr-only">${element.name} quantity</label><input class="text-center itemQuantity" type="number" step="${element.weightInGrams}" size="4" value="${element.weight}" disabled /><input type="button" class="bg-cta px-4 py-2 rounded plusBtn" value="+" /></td>
             <td class="line-cost"><p class="calculated-price"></p></td>
         </tr>
     `
@@ -77,7 +77,6 @@ function decrementQty(item){
 
             if(quantity.value <= 0) {
                 quantity.value = 0;
-                //removeProductFromCart();
             }
 
             removeWeightFromProduct(e);
@@ -87,6 +86,28 @@ function decrementQty(item){
             handleCartWeight();
     })
 }
+
+function removeItemFromCart(){
+    const removeItemBtns = Array.from(document.querySelectorAll('.remove-item'));
+
+    removeItemBtns.forEach(btn => {
+        btn.addEventListener('click', function(e){
+            const targetId = btn.closest('[data-id]').dataset.id;
+            let product = getProductById(window.cart, targetId);
+
+            window.cart.forEach((item, i) => {
+                if(item.id == targetId){
+                    window.cart = window.cart.filter(item => item.id != product.id)
+                    saveCart();
+                    window.location.reload();
+                }
+            })
+
+        })
+    })
+
+};
+
 
 function calculateSubtotal(item){
     const calculatedPriceEl = item.querySelector('.calculated-price');
