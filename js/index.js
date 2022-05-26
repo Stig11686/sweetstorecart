@@ -17,11 +17,18 @@ if (productPageBody !== null) {
 
     const productData = getProductById(window.products, id);
 
-    let productTitle = document.querySelector('.product-title');
-    let productPrice = document.querySelector('.product-price');
+    const productTitle = Array.from(document.querySelectorAll('.product-title'));
+    const productPrice = document.querySelector('.product-price');
+    const productImage = document.getElementById('product-image');
+    const productDescription = document.querySelector('.product-description');
+    const productCard = document.querySelector('.product-card');
 
-    productTitle.innerHTML = productData.name;
-    productPrice.innerHTML = productData.price;
+    productTitle.forEach(title => title.innerHTML = productData.name);
+    productPrice.innerHTML = `£${productData.price} per gram`;
+    productImage.src = productData.imagePath;
+    productImage.alt = productData.name;
+    productDescription.innerHTML = productData.description;
+    productCard.dataset.id = productData.id;
 
 }
 
@@ -33,10 +40,15 @@ productCards.forEach(product => {
 
 function addProductToCart(event) {
     // don't follow the link href
-    const productTitle = document.querySelector('.product-title');
-    if(event.target !== productTitle){
-        event.preventDefault();
-    }
+    const productTitles =
+    Array.from(document.querySelectorAll('.product-title-link'));
+
+    productTitles.forEach(title => {
+        if(event.target !== title){
+            event.preventDefault();
+        }
+    })
+
 
     const targetId = event.target.closest('[data-id]').dataset.id;
 
@@ -57,6 +69,7 @@ function addProductToCart(event) {
     }
 
     saveCart();
+    updateCartWidget();
 
 }
 
@@ -82,6 +95,7 @@ function removeWeightFromProduct(event){
     }
 
     saveCart();
+    updateCartWidget();
 }
 
 function loadCart() {
@@ -100,3 +114,22 @@ function saveCart() {
 
 // load the cart in immediately
 loadCart();
+
+function updateCartWidget(){
+    const widget = document.getElementById('cart-widget');
+    const cartItemsNumber = document.querySelector('.cart-items-number');
+
+    if(window.cart.length){
+        cartItemsNumber.classList.remove('hidden');
+        cartItemsNumber.classList.add('block');
+        cartItemsNumber.innerText = window.cart.length;
+    } else {
+        cartItemsNumber.classList.add('hidden');
+        cartItemsNumber.classList.remove('block');
+        cartItemsNumber.innerText = '';
+    }
+
+
+}
+
+updateCartWidget();

@@ -1,9 +1,12 @@
+//GLOBAL VARIABLES AT THETOP OF THE DOCUMENT AS PER JAVASCRIPT CODING STANDARDS
 const cartPage = document.querySelector('#cart');
 const cartTable = document.querySelector('.cart-items');
 const errorMessage = document.querySelector('.error-message');
 let currentWeight = document.querySelector('.current-weight');
 const clearCartBtn = document.querySelector('.clear-cart-btn');
 let markup
+
+//DEFINE WHAT MARKUP WE WANT OUR CART TO USE - IF THE CART DOESN'T EXIST OR HAS A LENGTH OF ZERO WE OUTPUT A MESSAGE - OTHERWISE WE OUTPUT EACH OF OUR ITEMS
 
 if(!window.cart.length){
     markup = `<div class="flex flex-col items-center justify-center">
@@ -12,13 +15,16 @@ if(!window.cart.length){
 
     </div> `
 
-    cartPage.innerHTML = ''
-    cartPage.insertAdjacentHTML('afterbegin', markup);
+    if(cartPage){
+        cartPage.innerHTML = ''
+        cartPage.insertAdjacentHTML('afterbegin', markup);
+    }
+
 } else {
     window.cart.forEach(element => {
         markup = `
         <tr class="w-full my-4 rounded cart-item text-center" data-id="${element.id}">
-            <td class="h-full"><p class="remove-item block w-6 h-6 flex items-center justify-center text-lightgrey font-bold text-center p-2 rounded-full border border-1 border-lightgrey" onclick="removeItemFromCart()">X</p></td>
+            <td class="h-full"><p class="cursor-pointer remove-item block w-6 h-6 flex items-center justify-center text-lightgrey font-bold text-center p-2 rounded-full border border-1 border-lightgrey" onclick="removeItemFromCart()">X</p></td>
             <td><img class="h-28 w-28" src="${element.imagePath}" alt="${element.name}" /></td>
             <td><p>${element.name}</p></td>
             <td><p class="price">£${element.price}</p></td>
@@ -32,6 +38,7 @@ if(!window.cart.length){
 
 }
 
+//LOOP OVER EACH OF THE CART ITEMS WE'VE INJECTED INTO THE PAGE AND ADD BUTTON FUNCTIONALITY TO EACH AND CALCULATE THE SUBTOTAL FOR EACH
 const cartItems = document.querySelectorAll('.cart-item');
 cartItems.forEach(item => {
     calculateSubtotal(item);
@@ -44,8 +51,10 @@ function incrementQty(item){
     const quantity = item.querySelector('.itemQuantity');
     plusBtn.addEventListener('click', function(e){
         e.preventDefault();
+        //IN OUR HTML WE HAVE DEFINED A 'STEP' ATTRIBUTE THAT IS EQUAL TO THE WEIGHT IN GRAMS OF EACH SWEET - HOWEVER IT IS RETURNED TO US HERE AS A STRING - SO WE NEED TO CONVERT IT TO A NUMBER TO USE IT IN MATHS
         let step = Number(quantity.step)
 
+        //ONE OF OUR SWEETS HAS A DECIMAL SO WE HAVE TO HANDLE IT SLIGHTLY DIFFERENTLY - WE WANT TO ENSURE THAT EVERY SUM IT DOES ONLY ROUNDS TO 1 DECIMAL PLACE
         if(Number.isInteger(step)){
             quantity.value = parseInt(quantity.value) + parseInt(step);
         } else {
@@ -57,7 +66,7 @@ function incrementQty(item){
         calculateSubtotal(item);
         calculateCartTotal();
         handleCartWeight();
-
+        handlePostage();
     })
 }
 
@@ -68,22 +77,25 @@ function decrementQty(item){
         e.preventDefault();
         let step = Number(quantity.step)
 
-
+        //THIS IS THE SAME AS THE INCREMENT FUNCTION - BUT WE CAN'T REUSE THAT CODE AS WE NEED TO SUBTRACT HERE INSTEAD OF ADD
             if(Number.isInteger(step)){
                 quantity.value = parseInt(quantity.value) - parseInt(step);
             } else {
                 quantity.value = Number(parseFloat(quantity.value) - parseFloat(step)).toFixed(1);
             }
-
+            //BY ADDING A MINIMUM VALUE IN THE HTML - THIS SHOULDN'T BE REQUIRED - BUT IN TESTING SOME VALUES DID GO BELOW ZERO - SO IF IT HAPPENS WE SET IT TO ZERO HERE.
             if(quantity.value <= 0) {
                 quantity.value = 0;
             }
 
+            //CHECKS WHEN THE DECREASE BUTTON IS CLICKED
             removeWeightFromProduct(e);
             saveCart();
             calculateSubtotal(item);
             calculateCartTotal();
             handleCartWeight();
+            handlePostage();
+            updateCartWidget();
     })
 }
 
@@ -91,14 +103,17 @@ function removeItemFromCart(){
     const removeItemBtns = Array.from(document.querySelectorAll('.remove-item'));
 
     removeItemBtns.forEach(btn => {
-        btn.addEventListener('click', function(e){
+        btn.addEventListener('click', function(){
             const targetId = btn.closest('[data-id]').dataset.id;
             let product = getProductById(window.cart, targetId);
 
-            window.cart.forEach((item, i) => {
+            window.cart.forEach(item => {
                 if(item.id == targetId){
                     window.cart = window.cart.filter(item => item.id != product.id)
                     saveCart();
+                    handlePostage();
+                    updateCartWidget();
+                    //WE REFRESH THE PAGE HERE - WHEN ADDING A SERVER SIDE TO THIS APPLICATION AN AJAX REQUEST WOULD REPLACE THIS
                     window.location.reload();
                 }
             })
@@ -108,7 +123,7 @@ function removeItemFromCart(){
 
 };
 
-
+//THIS IS ONE OF A NUMBER OF FUNCTIONS THAT I WRITE AND THEN CALL IMMEDIATELY - THIS IS BECAUSE THEY NEED TO RUN AS SOON AS THE PAGES OPENS IN CASE USERS HAVE ADDED TO THE CART FROM ELSEWHERE
 function calculateSubtotal(item){
     const calculatedPriceEl = item.querySelector('.calculated-price');
     let priceEl = item.querySelector('.price')
@@ -119,8 +134,11 @@ function calculateSubtotal(item){
 }
 
 function calculateCartTotal(){
-    let subtotalElement = document.querySelector('.subtotal');
-    let lineItems = Array.from(document.querySelectorAll('.line-cost'));
+    const subtotalElement = document.querySelector('.subtotal');
+    const lineItems = Array.from(document.querySelectorAll('.line-cost'));
+    const postalTotal = handlePostage();
+    const finalTotalElement = document.querySelector('.final-total');
+    let finalTotal = 0;
 
     if(lineItems.length){
         let prices = lineItems.map(item => {
@@ -129,9 +147,14 @@ function calculateCartTotal(){
 
         let subtotal = prices.reduce((a, b) => a + b);
         subtotal = subtotal.toFixed(2);
+        console.log(subtotal);
         subtotalElement.innerText = `£${subtotal}`
-    }
 
+        if(typeof postalTotal === 'number'){
+            finalTotal = (Number(subtotal) + postalTotal).toFixed(2);
+            finalTotalElement.innerText = `£${finalTotal}`;
+        }
+    }
 }
 
 calculateCartTotal();
@@ -144,25 +167,56 @@ function handleCartWeight(){
     } else {
         cartWeight = 0
     }
-    currentWeight.innerText = cartWeight.toFixed(1);
-
-    if(cartWeight >= 40){
-        errorMessage.classList.add('hidden');
-        errorMessage.classList.remove('block')
-    } else {
-        errorMessage.classList.add('block');
-        errorMessage.classList.remove('hidden')
-    }
+    return cartWeight;
 }
 
-handleCartWeight();
+function handlePostage(){
+    const postageMessage = document.querySelector('.postage-message');
+    const postalTotal = document.querySelector('.postage-total');
+    let postalAmount;
+
+    if(window.cart.length){
+        const cartWeight = handleCartWeight();
+
+        switch (true) {
+            case cartWeight < 40:
+                postageMessage.innerText = 'You need at least 40grams of sweets in your cart to order'
+                break;
+            case (cartWeight > 40 && cartWeight <= 250):
+                postageMessage.innerHTML = ''
+                postalAmount = 1.5;
+                postalTotal.innerText = `£${postalAmount.toFixed(2)}`;
+                break;
+            case (cartWeight > 250 && cartWeight <= 500):
+                postageMessage.innerHTML = ''
+                postalAmount = 2;
+                postalTotal.innerText = `£${postalAmount.toFixed(2)}`;
+                break;
+            case cartWeight > 500:
+                postageMessage.innerHTML = ''
+                postalAmount = 2.5;
+                postalTotal.innerText = `£${postalAmount.toFixed(2)}`;
+                break;
+            default:
+                postalAmount = 'Your cart needs to contain 40 grams of sweets to qualify for postage'
+                break;
+        }
+    }
+
+    return postalAmount;
+
+}
+
+handlePostage();
 
 function clearCart(){
     localStorage.setItem('cart', '');
     window.location.reload();
 
 }
+if(clearCartBtn){
+    clearCartBtn.addEventListener('click', clearCart);
+}
 
-clearCartBtn.addEventListener('click', clearCart);
 
 
