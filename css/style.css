@@ -1,0 +1,97 @@
+html {
+    font-family: 'Sarabun', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bad Script', monospace !important;
+}
+
+.hero-home {
+    background-image: url(../assets/sweets-main-bg.jpg);
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+}
+
+.hero-home main {
+    z-index: 1;
+}
+
+.hero-internal {
+    min-height: 50vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.2);
+}
+.hero-internal header,
+.hero-home header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#parallax {
+    background-image: url(../assets/fruit-pastilles-bg.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    display: flex;
+    min-height: 450px;
+    position: relative;
+}
+
+#parallax .parallax-cta {
+    position: absolute;
+    top: 40%;
+    right: 15%;
+}
+
+#newsletter input {
+    height: 4rem;
+    border-radius: 50px;
+    line-height: 1.2857em;
+}
+
+#newsletter input[type="submit"]{
+    margin-left: -3rem;
+    border-radius: 50px;
+}
+
+.product-card {
+    border-radius: 50px;
+}
+
+.product-card .product-card-img {
+    min-height: 300px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
