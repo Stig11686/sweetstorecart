@@ -100,7 +100,7 @@ function renderProducts(location, products){
         </div>
         <div class="product-card-details flex flex-col justify-between">
             <p class="product-title text-lg font-bold"><a class="product-title-link" href="product.html?id=${product.id}">${product.name}</a></p>
-            <p class="product-price mb-4">${product.price} per ${product.weightInGrams}</p>
+            <p class="product-price mb-4">£${product.price} per ${product.weightInGrams}</p>
             <p class="product-description">${product.description}</p>
             <button class="add-to-cart mt-6 bg-cta text-white px-4 py-2 rounded w-6/12 mx-auto">Add to Cart</button>
         </div>
@@ -110,10 +110,12 @@ function renderProducts(location, products){
     })
 }
 
+//I CREATED A FEATURED LIST - WITH A BOOLEAN VALUE OF WHETHER THE PRODUCT WAS FEATURED OR NOT. MY VISION WAS THAT IF THERE WAS AN ADMIN PAGE A FORM WITH A CHECKBOX COULD CONTROL WHETHER THE PRODUCT WAS FEATURED OR NOT
 function getFeaturedProducts(data){
     return data.filter(item => item.featured)
 }
 
+//I NEEDED TO CREATE A LIST ELEMENT TO INSERT INTO THE DOM
 function createUl(){
     const listElement = document.createElement('ul');
     listElement.classList.add('flex', 'flex-wrap', 'w-full');

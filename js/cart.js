@@ -22,6 +22,7 @@ if(cartPage){
 
     } else {
         window.cart.forEach(element => {
+            element.weight = Number(element.weight.toFixed(1));
             markup = `
             <tr class="w-full my-4 rounded cart-item text-center" data-id="${element.id}">
                 <td class="h-full"><p class="cursor-pointer remove-item block w-6 h-6 flex items-center justify-center text-lightgrey font-bold text-center p-2 rounded-full border border-1 border-lightgrey" onclick="removeItemFromCart()">X</p></td>
@@ -46,6 +47,7 @@ if(cartPage){
         decrementQty(item);
     })
 
+    //INCREASE ITEM QUANTITY ON CLICK
     function incrementQty(item){
         const plusBtn = item.querySelector('.plusBtn');
         const quantity = item.querySelector('.itemQuantity');
@@ -70,6 +72,7 @@ if(cartPage){
         })
     }
 
+    //DECREASE ITEM QUANTITY ON CLICK
     function decrementQty(item){
         const minusBtn = item.querySelector('.minusBtn');
         const quantity = item.querySelector('.itemQuantity');
@@ -99,6 +102,7 @@ if(cartPage){
         })
     }
 
+    //REMOVE ITEM FROM CART ALTOGETHER
     function removeItemFromCart(){
         const removeItemBtns = Array.from(document.querySelectorAll('.remove-item'));
 
@@ -123,7 +127,7 @@ if(cartPage){
 
     };
 
-    //THIS IS ONE OF A NUMBER OF FUNCTIONS THAT I WRITE AND THEN CALL IMMEDIATELY - THIS IS BECAUSE THEY NEED TO RUN AS SOON AS THE PAGES OPENS IN CASE USERS HAVE ADDED TO THE CART FROM ELSEWHERE
+    //THIS IS ONE OF A NUMBER OF FUNCTIONS THAT I WRITE AND THEN CALL IMMEDIATELY - THIS IS BECAUSE THEY NEED TO RUN AS SOON AS THE PAGES OPENS IN CASE USERS HAVE ADDED TO THE CART FROM ELSEWHERE IN THE APPLICATION
     function calculateSubtotal(item){
         const calculatedPriceEl = item.querySelector('.calculated-price');
         let priceEl = item.querySelector('.price')
@@ -162,7 +166,7 @@ if(cartPage){
         let cartWeight;
 
         if(window.cart.length){
-            cartWeight = window.cart.map(item => item.weight).reduce((a,b) => a + b).toFixed(0);
+            cartWeight = Number(window.cart.map(item => item.weight).reduce((a,b) => a + b)).toFixed(0);
         } else {
             cartWeight = 0;
         }
@@ -177,6 +181,7 @@ if(cartPage){
         if(window.cart.length){
             const cartWeight = handleCartWeight();
 
+        //SEVERAL OPTIONS FOR POSTAGE I'VE HANDLED WITH A SWITCH CASE - THERE IS DEBATE ABOUT WHETHER MULTIPLE IF STATEMENTS ARE MORE PERFORMANT - BUT FOR OUR USE CASE I LIKE THIS APPROACH
             switch (true) {
                 case cartWeight < 40:
                     postageMessage.innerText = `You need at least 40 grams of sweets in your cart to order. You currently have ${handleCartWeight()} grams`

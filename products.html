@@ -39,44 +39,48 @@
     <!--
         Hero Section
     -->
-    <section id="hero" class="hero-internal" style="background-image: url(../assets/sweets-main-bg.jpg);">
-        <div class="overlay"></div>
-        <header>
-            <nav class="w-full py-8">
-                <div class="flex space-between w-full">
-                    <div>
-                        <p class="logo">Our Super Awesome Sweet Store</p>
+    <header>
+        <section id="hero" class="hero-internal" style="background-image: url(../assets/sweets-main-bg.jpg);">
+            <div class="overlay"></div>
+            <header>
+                <nav class="w-full py-8">
+                    <div class="flex space-between w-full">
+                        <div>
+                            <p class="logo">Our Super Awesome Sweet Store</p>
+                        </div>
+                        <div class="ml-auto">
+                            <ul class="flex space-between ml-auto">
+                                <li class="px-8 font-bold uppercase"><a href="/">Home</a></li>
+                                <li class="px-8 font-bold uppercase"><a href="./products.html" title="Products">Products</a></li>
+                                <li class="px-8 font-bold uppercase"><a href="./cart.html" title="Cart">Cart</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="ml-auto">
-                        <ul class="flex space-between ml-auto">
-                            <li class="px-8 font-bold uppercase"><a href="/">Home</a></li>
-                            <li class="px-8 font-bold uppercase"><a href="./products.html" title="Products">Products</a></li>
-                            <li class="px-8 font-bold uppercase"><a href="./cart.html" title="Cart">Cart</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <main class="flex flex-col align-center justify-center">
-            <h1 class="text-xxl font-bold mb-8">Welcome to A Super Awesome Sweet Shop!</h1>
-            <a href="./products.html" class="w-3/12 mx-auto text-black font-bold p-3 text-center rounded bg-cta text-white">SHOP NOW!</a>
-        </main>
-    </section>
+                </nav>
+            </header>
+            <main class="flex flex-col align-center justify-center">
+                <h1 class="text-xxl font-bold mb-8">Welcome to A Super Awesome Sweet Shop!</h1>
+                <a href="./products.html" class="w-3/12 mx-auto text-black font-bold p-3 text-center rounded bg-cta text-white">SHOP NOW!</a>
+            </main>
+        </section>
+    </header>
 
-    <section id="products" class="w-9/12 mx-auto py-24">
-        <h2 class="text-xxl text-center">Welcome to the Full Sweet Shop!</h2>
-        <div class="product-display py-24">
+    <main>
+        <section id="products" class="w-9/12 mx-auto py-24">
+            <h2 class="text-xxl text-center">Welcome to the Full Sweet Shop!</h2>
+            <div class="product-display py-24">
 
+            </div>
+        </section>
+        <div id="cart-widget" class="w-20 h-20 fixed right-0 top-50 rounded">
+            <div class="bg-cta rounded relative">
+                <a href="cart.html">
+                    <img src="assets/icon-cart.svg" class="w-full" alt="cart icon">
+                    <div class="h-6 w-6 bg-white text-dark flex items-center cart-items-number absolute bottom-0 right-10pc rounded-full text-white p-2 hidden"></div>
+                </a>
+            </div>
         </div>
-    </section>
-    <div id="cart-widget" class="w-20 h-20 fixed right-0 top-50 rounded">
-        <div class="bg-cta rounded relative">
-            <a href="cart.html">
-                <img src="assets/icon-cart.svg" class="w-full" alt="cart icon">
-                <div class="h-6 w-6 bg-white text-dark flex items-center cart-items-number absolute bottom-0 right-10pc rounded-full text-white p-2 hidden"></div>
-            </a>
-        </div>
-    </div>
+    </main>
 
     <footer id="footer" class="py-12 w-full bg-dark text-white">
         <div class="flex w-9/12 mx-auto justify-around">
